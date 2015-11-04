@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- Open Simulation Architecture (OSA)                                  -->
+<!--                                                                     -->
+<!-- This software is distributed under the terms of the                 -->
+<!-- CECILL-C FREE SOFTWARE LICENSE AGREEMENT                            -->
+<!-- (see http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html)   -->
+<!--                                                                     -->
+<!-- Copyright © 2006-2015 Université Nice Sophia Antipolis              -->
+<!-- Contact author: Olivier Dalle (olivier.dalle@unice.fr)              -->
+<!--                                                                     -->
+<!-- Parts of this software development were supported and hosted by     -->
+<!-- INRIA from 2006 to 2015, in the context of the common research      -->
+<!-- teams of INRIA and I3S, UMR CNRS 7172 (MASCOTTE, COATI, OASIS and   -->
+<!-- SCALE).                                                             -->
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.osadev.osa</groupId>
+	<artifactId>maven-config</artifactId>
+	<version>0.8.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>OSA Maven Configuration</name>
+	<description>
+		This is the top-level modules for OSA. It contains the detailed specifications 
+		of the dependencies, such that those details are not spread around and possibly inconsistent.
+	</description>
+
+
+	<!-- NEW since version 0.8.X:                   -->
+	<!-- * Moved scm to git@github                  -->
+	<!-- * Changed web url to osadev.org            -->
+	<!-- * Changed group id to org.osadev.osa (ooo) -->
+
+	<properties>
+		<!-- Some version infos -->
+		
+		<julia.bundle.version>2.5.2</julia.bundle.version>
+		<koch.bundle.version>2.5.2.1</koch.bundle.version>
+		<fraclet.bundle.version>3.2.3</fraclet.bundle.version>
+		
+		
+		<!-- scm location config -->
+		<scm.url>//scm.gforge.inria.fr/svn/osa</scm.url>
+		<scm.dev.url>scm:svn:svn+ssh:${scm.url}</scm.dev.url>
+		<scm.reg.url>scm:svn:svn:${scm.url}</scm.reg.url>
+		
+		<!-- OSA has its own deployement server wit maven repo and web site -->
+		<devrepo.id>osadevrepo</devrepo.id>
+		<devrepo.name>OSA Dev Repository</devrepo.name>
+		<!-- DAV does not seem to be able to create new directories. -->
+		<!-- External ssh requires additional settings in settings.xml -->
+		<devrepo.url.up>scpexe://osa.inria.fr/var/osadev_repo/</devrepo.url.up>
+		<devrepo.url.down>http://osa.inria.fr/osadev_repo/</devrepo.url.down>
+		<website.id>osawebsite</website.id>
+		
+		<!-- Starting OSA v0.7 the whole web-site is versioned, except the web-site
+			root. -->
+		<!-- The web-site root is handled as a separate dependency with id f.i.o.wwwroot. -->
+		<website.url.up>dav:http://osa.inria.fr/osa_website/0.7/</website.url.up>
+		<website.rooturl>http://osa.inria.fr/</website.rooturl>
+		
+	</properties>
+	
+	<scm>
+		<connection>${scm.reg.url}/trunk/</connection>
+		<developerConnection>${scm.dev.url}/trunk/</developerConnection>
+		<url>${scm.reg.url}</url>
+  	</scm>
+	
+	<distributionManagement>
+		<repository>
+			<id>${devrepo.id}</id>
+			<name>${devrepo.name}</name>
+			<url>${devrepo.url.up}</url>
+			<uniqueVersion>false</uniqueVersion>
+		</repository>
+		<site>
+			<id>${website.id}</id>
+			<url>${website.url.up}</url>
+		</site>
+	</distributionManagement>
+
+	<!-- FIXME: this config pom is part of the osa basic bundle.
+		It should rather be made external and self-contained such that
+		multiple bundles can depend on it. -->
+	<build>
+		<!-- Configure plugin execution for the current maven pom -->
+		<plugins>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<tagBase>${scm.reg.url}/tags/releases-0.7</tagBase>
+					<checkModificationExcludes>
+						<checkModificationExclude>.project</checkModificationExclude>
+					</checkModificationExcludes>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>
+			<plugin>
+              <artifactId>maven-scm-plugin</artifactId>
+              <configuration>
+              		<connectionType>developerConnection</connectionType>
+                  <tag>${project.artifactId}-${project.version}</tag>
+              </configuration>
+          	</plugin>
+		</plugins>
+		
+		<!-- To define the plugin version in your parent POM -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+      				<groupId>com.github.jeluard</groupId>
+      				<artifactId>plantuml-maven-plugin</artifactId>
+      				<version>1.1</version>
+      			</plugin>
+      			<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.1</version>
+				</plugin>
+				<plugin>
+              		<artifactId>maven-scm-plugin</artifactId>
+              		<version>1.9</version>
+              	</plugin>
+				<plugin>
+					<groupId>com.kryshchuk.maven.plugins</groupId>
+					<artifactId>umlet-maven-plugin</artifactId>
+					<version>1.1.7od</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.3</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.maven.doxia</groupId>
+							<artifactId>doxia-module-docbook-simple</artifactId>
+							<version>1.6</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.7</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.10.3</version>
+				</plugin>
+				
+				<plugin>
+					<groupId>maven-plugins</groupId>
+					<artifactId>maven-dotuml-plugin</artifactId>
+					<version>1.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.4</version>
+					<executions>
+						<execution>
+							<phase>deploy</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											exec-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.1.1,)
+										</versionRange>
+										<goals>
+											<goal>java</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.github.jeluard
+										</groupId>
+										<artifactId>
+											plantuml-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.1,)
+										</versionRange>
+										<goals>
+											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.objectweb.fractal</groupId>
+				<artifactId>fractal-api</artifactId>
+				<version>2.0.2</version>
+			</dependency>
+			<dependency>
+				<groupId>org.objectweb.fractal.julia</groupId>
+				<artifactId>julia-mixins</artifactId>
+				<version>${julia.bundle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.objectweb.fractal.julia</groupId>
+				<artifactId>julia-asm</artifactId>
+				<version>${julia.bundle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.objectweb.fractal.julia</groupId>
+				<artifactId>koch-runtime</artifactId>
+				<version>${koch.bundle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.objectweb.fractal.julia</groupId>
+				<artifactId>koch-mixins</artifactId>
+				<version>${julia.bundle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.objectweb.fractal.julia</groupId>
+				<artifactId>koch-mc</artifactId>
+				<version>${koch.bundle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.objectweb.fractal.julia</groupId>
+				<artifactId>julia-runtime</artifactId>
+				<version>${julia.bundle.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.objectweb.fractal</groupId>
+				<artifactId>fractal-util</artifactId>
+				<version>1.1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.objectweb.fractal.fraclet.java</groupId>
+				<artifactId>fractaladl-spoonlet</artifactId>
+				<version>${fraclet.bundle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.objectweb.fractal.fraclet.java</groupId>
+				<artifactId>fraclet-annotations</artifactId>
+				<version>${fraclet.bundle.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.7.10</version>
+			</dependency>
+			<dependency>
+				<groupId>xerces</groupId>
+				<artifactId>xerces</artifactId>
+				<version>2.4.0</version>
+			</dependency>
+			<dependency>
+				<groupId>fr.inria.gforge.spoon</groupId>
+				<artifactId>spoon-core</artifactId>
+				<version>1.4.2</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-pool</groupId>
+				<artifactId>commons-pool</artifactId>
+				<version>1.4</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>18.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-slf4j-impl</artifactId>
+				<version>2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.objectweb.fractal.fractaladl</groupId>
+				<artifactId>fractal-adl</artifactId>
+				<version>2.3.1</version>
+			</dependency>
+			<dependency>
+			<groupId>fr.inria.osa.simapis</groupId>
+			<artifactId>osa-simapis-newdes</artifactId>
+			<version>0.7.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.inria.osa.runtime.newdes.logger</groupId>
+			<artifactId>osa-logger-slf4j</artifactId>
+			<version>0.7.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.inria.osa.simapis</groupId>
+			<artifactId>osa-simapis-newdes-osalet</artifactId>
+			<version>0.7.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.inria.osa.runtime.newdes</groupId>
+			<artifactId>osa-rt-newdes-event-launcher</artifactId>
+			<version>0.7.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.inria.osa.engines</groupId>
+			<artifactId>osa-engines-newdes</artifactId>
+			<version>0.7.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.inria.osa.model.newdes</groupId>
+			<artifactId>osa-model-newdes-event-helloworld</artifactId>
+			<version>0.7.2-SNAPSHOT</version>
+		</dependency>
+		
+		</dependencies>
+	</dependencyManagement>
+</project>
