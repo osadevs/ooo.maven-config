@@ -33,7 +33,7 @@
 	<!-- NEW since version 0.8.X:                   -->
 	<!-- * Moved scm to git@github                  -->
 	<!-- * Changed web url to osadev.org            -->
-	<!-- * Changed group id to org.osadev.osa (ooo) -->
+	<!-- * Changed group id and package prefix to org.osadev.osa (ooo) -->
 
 	<properties>
 		<!-- Some version infos -->
@@ -42,11 +42,13 @@
 		<koch.bundle.version>2.5.2.1</koch.bundle.version>
 		<fraclet.bundle.version>3.2.3</fraclet.bundle.version>
 		
+		<!-- project directory name  -->
+		<location>ooo.${project.artifactId}</location>
 		
-		<!-- scm location config -->
-		<scm.url>//scm.gforge.inria.fr/svn/osa</scm.url>
-		<scm.dev.url>scm:svn:svn+ssh:${scm.url}</scm.dev.url>
-		<scm.reg.url>scm:svn:svn:${scm.url}</scm.reg.url>
+		<!-- scm location config: keep as is -->
+		<scm.url>osadevs/${location}.git</scm.url>
+		<scm.reg.url>scm:git:git://github.com/${scm.url}</scm.reg.url>
+		<scm.dev.url>scm:git:git@github.com:${scm.url}</scm.dev.url>
 		
 		<!-- OSA has its own deployement server wit maven repo and web site -->
 		<devrepo.id>osadevrepo</devrepo.id>
@@ -66,9 +68,9 @@
 	</properties>
 	
 	<scm>
-		<connection>${scm.reg.url}/trunk/</connection>
-		<developerConnection>${scm.dev.url}/trunk/</developerConnection>
-		<url>${scm.reg.url}</url>
+		<url>https://github.com/${scm.url}</url>
+		<connection>${scm.reg.url}</connection>
+		<developerConnection>${scm.dev.url}</developerConnection>
   	</scm>
 	
 	<distributionManagement>
