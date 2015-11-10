@@ -24,6 +24,8 @@
 	<version>0.8.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>OSA Maven Configuration</name>
+	
+	
 	<description>
 		This is the top-level modules for OSA. It contains the detailed specifications 
 		of the dependencies, such that those details are not spread around and possibly inconsistent.
@@ -72,6 +74,15 @@
 		<connection>${scm.reg.url}</connection>
 		<developerConnection>${scm.dev.url}</developerConnection>
   	</scm>
+  	
+  	<licenses>
+		<license>
+			<name>CeCILL-C</name>
+			<comments>French equivalent to LGPL</comments>
+			<url>http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 	
 	<distributionManagement>
 		<repository>
