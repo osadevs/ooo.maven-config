@@ -17,25 +17,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.osadev.osa</groupId>
+
+	<parent>
+		<groupId>org.osadev.osa</groupId>
+		<artifactId>osa-root</artifactId>
+		<version>0.8.0-SNAPSHOT</version>
+	</parent>
+
 	<artifactId>maven-config</artifactId>
-	<version>0.8.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>OSA Maven Configuration</name>
-	
+
 	
 	<description>
-		This is the top-level modules for OSA. It contains the detailed specifications 
+		This is the top-level modules for building other OSA modules. It contains the detailed specifications 
 		of the dependencies, such that those details are not spread around and possibly inconsistent.
 	</description>
-
-
-	<!-- NEW since version 0.8.X:                   -->
-	<!-- * Moved scm to git@github                  -->
-	<!-- * Changed web url to osadev.org            -->
-	<!-- * Changed group id and package prefix to org.osadev.osa (ooo) -->
 
 	<properties>
 		<!-- Some version infos -->
@@ -43,59 +41,8 @@
 		<julia.bundle.version>2.5.2</julia.bundle.version>
 		<koch.bundle.version>2.5.2.1</koch.bundle.version>
 		<fraclet.bundle.version>3.2.3</fraclet.bundle.version>
-		
-		<!-- project directory name  -->
-		<location>ooo.${project.artifactId}</location>
-		
-		<!-- scm location config: keep as is -->
-		<scm.url>osadevs/${location}.git</scm.url>
-		<scm.reg.url>scm:git:git://github.com/${scm.url}</scm.reg.url>
-		<scm.dev.url>scm:git:git@github.com:${scm.url}</scm.dev.url>
-		
-		<!-- OSA has its own deployement server wit maven repo and web site -->
-		<devrepo.id>osadevrepo</devrepo.id>
-		<devrepo.name>OSA Dev Repository</devrepo.name>
-		<!-- DAV does not seem to be able to create new directories. -->
-		<!-- External ssh requires additional settings in settings.xml -->
-		<devrepo.url.up>scpexe://osa.inria.fr/var/osadev_repo/</devrepo.url.up>
-		<devrepo.url.down>http://osa.inria.fr/osadev_repo/</devrepo.url.down>
-		<website.id>osawebsite</website.id>
-		
-		<!-- Starting OSA v0.7 the whole web-site is versioned, except the web-site
-			root. -->
-		<!-- The web-site root is handled as a separate dependency with id f.i.o.wwwroot. -->
-		<website.url.up>dav:http://osa.inria.fr/osa_website/0.7/</website.url.up>
-		<website.rooturl>http://osa.inria.fr/</website.rooturl>
-		
+		<osa.bundle.version>0.8.0</osa.bundle.version>
 	</properties>
-	
-	<scm>
-		<url>https://github.com/${scm.url}</url>
-		<connection>${scm.reg.url}</connection>
-		<developerConnection>${scm.dev.url}</developerConnection>
-  	</scm>
-  	
-  	<licenses>
-		<license>
-			<name>CeCILL-C</name>
-			<comments>French equivalent to LGPL</comments>
-			<url>http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-	
-	<distributionManagement>
-		<repository>
-			<id>${devrepo.id}</id>
-			<name>${devrepo.name}</name>
-			<url>${devrepo.url.up}</url>
-			<uniqueVersion>false</uniqueVersion>
-		</repository>
-		<site>
-			<id>${website.id}</id>
-			<url>${website.url.up}</url>
-		</site>
-	</distributionManagement>
 
 	<!-- FIXME: this config pom is part of the osa basic bundle.
 		It should rather be made external and self-contained such that
@@ -338,36 +285,30 @@
 				<version>2.3.1</version>
 			</dependency>
 			<dependency>
-			<groupId>fr.inria.osa.simapis</groupId>
-			<artifactId>osa-simapis-newdes</artifactId>
-			<version>0.7.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.inria.osa.runtime.newdes.logger</groupId>
-			<artifactId>osa-logger-slf4j</artifactId>
-			<version>0.7.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.inria.osa.simapis</groupId>
-			<artifactId>osa-simapis-newdes-osalet</artifactId>
-			<version>0.7.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.inria.osa.runtime.newdes</groupId>
-			<artifactId>osa-rt-newdes-event-launcher</artifactId>
-			<version>0.7.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.inria.osa.engines</groupId>
-			<artifactId>osa-engines-newdes</artifactId>
-			<version>0.7.2-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>fr.inria.osa.model.newdes</groupId>
-			<artifactId>osa-model-newdes-event-helloworld</artifactId>
-			<version>0.7.2-SNAPSHOT</version>
-		</dependency>
-		
+				<groupId>org.osadev.osa.simapis</groupId>
+				<artifactId>osa-simapis-newdes</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.osadev.osa.runtime.newdes.logger</groupId>
+				<artifactId>osa-logger-slf4j</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.osadev.osa.simapis</groupId>
+				<artifactId>osa-simapis-newdes-osalet</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.osadev.osa.runtime.newdes</groupId>
+				<artifactId>osa-rt-newdes-event-launcher</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.osadev.osa.engines</groupId>
+				<artifactId>osa-engines-newdes</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>
