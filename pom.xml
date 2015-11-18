@@ -67,11 +67,32 @@
                   <tag>${project.artifactId}-${project.version}</tag>
               </configuration>
           	</plugin>
+          	<!-- Add automatic generation of source archive to all descendent projects 
+				such that the sources can be automatically downloaded and installed along 
+				with the binary archive. -->
+				<plugin>
+					<artifactId>maven-source-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 		</plugins>
 		
 		<!-- To define the plugin version in your parent POM -->
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.3</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
 				<plugin>
       				<groupId>com.github.jeluard</groupId>
       				<artifactId>plantuml-maven-plugin</artifactId>
@@ -82,11 +103,7 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.3</version>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.1</version>
-				</plugin>
+				
 				<plugin>
               		<artifactId>maven-scm-plugin</artifactId>
               		<version>1.9</version>
@@ -96,23 +113,7 @@
 					<artifactId>umlet-maven-plugin</artifactId>
 					<version>1.1.7od</version>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>3.3</version>
-					<dependencies>
-						<dependency>
-							<groupId>org.apache.maven.doxia</groupId>
-							<artifactId>doxia-module-docbook-simple</artifactId>
-							<version>1.6</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>2.7</version>
-				</plugin>
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
@@ -124,18 +125,13 @@
 					<artifactId>maven-dotuml-plugin</artifactId>
 					<version>1.0</version>
 				</plugin>
+				
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
 					<version>2.4</version>
-					<executions>
-						<execution>
-							<phase>deploy</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
 				</plugin>
+				
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
@@ -311,4 +307,81 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	
+	<profiles>
+	<!-- Building javadoc takes time. Only build on request by activating this profile. -->
+		<profile>
+			<id>javadoc-only</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.jeluard</groupId>
+						<artifactId>plantuml-maven-plugin</artifactId>
+						<version>1.1</version>
+						
+						<configuration>
+							<sourceFiles>
+								<directory>${basedir}</directory>
+								<includes>
+									<include>src/main/plantuml/**/*.txt</include>
+								</includes>
+							</sourceFiles>
+						</configuration>
+						
+						<dependencies>
+							<dependency>
+								<groupId>net.sourceforge.plantuml</groupId>
+								<artifactId>plantuml</artifactId>
+								<version>7999</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+					
+					<plugin>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<groupId>org.apache.maven.plugins</groupId>
+						<version>2.10.3</version>
+						
+						<configuration>
+							<show>package</show>
+							<version>true</version>
+							<javadocVersion>1.5</javadocVersion>
+							<links>
+								<link>${asm.url}</link>
+								<link>${fractal.url}</link>
+								<link>http://fractal.ow2.org/current/doc/javadoc/fractal-adl/</link>
+								<link>http://fractal.ow2.org/fractaladl-site/current/task-framework/apidocs/</link>
+								<link>http://fractal.ow2.org/current/doc/javadoc/julia/</link>
+								<link>http://java.sun.com/j2se/1.5.0/docs/guide/javadoc/doclet/spec</link>
+								<link>${jdk.url}</link>
+							</links>
+							<source>${osa.bundle.version}</source>
+							<code>javadoc:aggregate</code>
+							<code>javadoc:test-aggregate</code>
+							<!-- <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet> -->
+							<!-- use this line or use the variable GRAPHVIZ_HOME <docletPath>/opt/local/bin/dot</docletPath> -->
+							<useStandardDocletOptions>true</useStandardDocletOptions>
+		
+							<doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
+							<docletArtifact>
+								<groupId>org.umlgraph</groupId>
+								<artifactId>umlgraph</artifactId>
+								<version>5.6.6</version>
+							</docletArtifact>
+							<additionalparam>
+								-dotexecutable ${dot.executable.path}
+								-inferrel -inferdep -hide java.*
+								-collpackages java.util.* -qualify
+								-postfixpackage -nodefontsize 9
+								-nodefontpackagesize 7
+							</additionalparam>
+							
+						</configuration>
+						
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 </project>
