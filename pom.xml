@@ -50,16 +50,7 @@
 	<build>
 		<!-- Configure plugin execution for the current maven pom -->
 		<plugins>
-			<plugin>
-				<artifactId>maven-release-plugin</artifactId>
-				<configuration>
-					<tagBase>${scm.reg.url}/tags/releases-0.7</tagBase>
-					<checkModificationExcludes>
-						<checkModificationExclude>.project</checkModificationExclude>
-					</checkModificationExcludes>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-				</configuration>
-			</plugin>
+			
 			<plugin>
               <artifactId>maven-scm-plugin</artifactId>
               <configuration>
@@ -98,12 +89,6 @@
       				<artifactId>plantuml-maven-plugin</artifactId>
       				<version>1.1</version>
       			</plugin>
-      			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.3</version>
-				</plugin>
-				
 				<plugin>
               		<artifactId>maven-scm-plugin</artifactId>
               		<version>1.9</version>
@@ -247,7 +232,7 @@
 			</dependency>
 			<dependency>
 				<groupId>xerces</groupId>
-				<artifactId>xerces</artifactId>
+				<artifactId>xercesImpl</artifactId>
 				<version>2.4.0</version>
 			</dependency>
 			<dependency>
@@ -342,10 +327,22 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<version>2.10.3</version>
 						
+						<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+						
 						<configuration>
 							<show>package</show>
 							<version>true</version>
-							<javadocVersion>1.5</javadocVersion>
+							<minmemory>128m</minmemory>
+          					<maxmemory>2g</maxmemory>
+							<!--  <javadocVersion>1.6</javadocVersion> -->
+							<detectLinks>true</detectLinks>
 							<links>
 								<link>${asm.url}</link>
 								<link>${fractal.url}</link>
@@ -357,25 +354,25 @@
 							</links>
 							<source>${osa.bundle.version}</source>
 							<code>javadoc:aggregate</code>
-							<code>javadoc:test-aggregate</code>
-							<!-- <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet> -->
+							<!--  <code>javadoc:test-aggregate</code> -->
+							<!--  <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet> -->
 							<!-- use this line or use the variable GRAPHVIZ_HOME <docletPath>/opt/local/bin/dot</docletPath> -->
+							
 							<useStandardDocletOptions>true</useStandardDocletOptions>
 		
 							<doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
 							<docletArtifact>
 								<groupId>org.umlgraph</groupId>
 								<artifactId>umlgraph</artifactId>
-								<version>5.6.6</version>
+								<version>5.6</version>
 							</docletArtifact>
 							<additionalparam>
-								-dotexecutable ${dot.executable.path}
+							    -dotexecutable ${dot.executable.path}
 								-inferrel -inferdep -hide java.*
 								-collpackages java.util.* -qualify
 								-postfixpackage -nodefontsize 9
 								-nodefontpackagesize 7
 							</additionalparam>
-							
 						</configuration>
 						
 					</plugin>
