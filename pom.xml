@@ -51,13 +51,7 @@
 		<!-- Configure plugin execution for the current maven pom -->
 		<plugins>
 			
-			<plugin>
-              <artifactId>maven-scm-plugin</artifactId>
-              <configuration>
-              		<connectionType>developerConnection</connectionType>
-                  <tag>${project.artifactId}-${project.version}</tag>
-              </configuration>
-          	</plugin>
+			
           	<!-- Add automatic generation of source archive to all descendent projects 
 				such that the sources can be automatically downloaded and installed along 
 				with the binary archive. -->
@@ -89,10 +83,7 @@
       				<artifactId>plantuml-maven-plugin</artifactId>
       				<version>1.1</version>
       			</plugin>
-				<plugin>
-              		<artifactId>maven-scm-plugin</artifactId>
-              		<version>1.9</version>
-              	</plugin>
+				
 				<plugin>
 					<groupId>com.kryshchuk.maven.plugins</groupId>
 					<artifactId>umlet-maven-plugin</artifactId>
