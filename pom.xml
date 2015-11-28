@@ -42,7 +42,7 @@
 		<julia.bundle.version>2.5.2</julia.bundle.version>
 		<koch.bundle.version>2.5.2.1</koch.bundle.version>
 		<fraclet.bundle.version>3.2.3</fraclet.bundle.version>
-		<osa.bundle.version>0.8.0</osa.bundle.version>
+		<osa.bundle.version>0.8.1-SNAPSHOT</osa.bundle.version>
 	</properties>
 
 	<!-- FIXME: this config pom is part of the osa basic bundle.
