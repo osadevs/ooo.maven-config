@@ -72,6 +72,13 @@
 		<!-- To define the plugin version in your parent POM -->
 		<pluginManagement>
 			<plugins>
+			
+				<plugin>
+					<groupId>net.sf.alchim</groupId>
+					<artifactId>spoon-maven-plugin</artifactId>
+					<version>0.7.1</version>
+				</plugin>
+			
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.3</version>
